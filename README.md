@@ -1,4 +1,10 @@
 # opendaylight-demo
+
+# What is this project about?
+
+This project is a demo project that uses opendaylight latest code base and presents a simpler use cases with example. At present there is good literature available already but with so many modules ODL needs slightly simpler way of explaining how things should work. with quicker releases and faster development cycles, it is very easy to get outdated documentation.
+
+
 Opendaylight sample
 ```java
 mvn archetype:generate -DarchetypeGroupId=org.opendaylight.controller -DarchetypeArtifactId=opendaylight-startup-archetype -DarchetypeRepository=https://nexus.opendaylight.org/content/repositories/public/ -DarchetypeCatalog=https://nexus.opendaylight.org/content/repositories/public/archetype-catalog.xml -DarchetypeVersion=1.2.0-SNAPSHOT
