@@ -48,3 +48,11 @@ this is the websocket URL
 
 now, using the yang ui you can generate the shop restock notification by invoking the RPC.
 
+or use postman
+[http://localhost:8181/restconf/operations/shop:restock-inventory]
+
+body
+
+```javascript
+{"input":{"items":[{"id":"3","name":"item 3","quantity":"12","price":"2"},{"id":"4","name":"item 4","quantity":"34","price":"12"},{"id":"5","name":"fifth","quantity":"20","price":"12"}]}}
+```
