@@ -1,0 +1,94 @@
+module shop {
+
+    yang-version 1;
+
+    namespace
+      "http://company.com/shop";
+
+    prefix shop;
+
+    organization "Company";
+
+    contact
+      "Harinath <hari@harinath.net>";
+
+    description
+      "YANG for simple example shop.
+
+     Copyright (c) 2016 Harinath Mallepally.";
+     
+    revision "2016-07-15" {
+      description
+        "Simple shopping";
+    }
+
+
+    identity order-type {
+      description
+        "Base for all bread types supported by the shopping cart.
+           New  types not listed here nay be added in the 
+           future.";
+    }
+
+    identity new-order {
+      base order-type;
+      description "new order";
+    }
+
+    identity return {
+      base order-type;
+      description "return";
+    }
+
+    identity restock {
+      base order-type;
+      description "return";
+    }
+
+
+    grouping inventory-item{
+       leaf id {type uint16;} 
+       leaf name { type string;}
+       
+       leaf quantity{type uint32;}
+       leaf price{ type uint16;}
+    }
+
+	container inventory{
+	  list items{
+	   key "id";
+	   uses inventory-item;
+	   
+	  }
+	}
+     
+     
+     
+     rpc restock-inventory {
+       description
+         "Restocks the  the inventory";
+       
+  
+       input {
+             list items{
+	 	  key "id";
+	  	 uses inventory-item;
+	   
+	  }
+       }
+   }
+   
+   
+
+   notification restockedInventory {
+     description
+       "Indicates that the toaster has run of out bread.";
+     leaf summary {
+       type string;
+       description
+         "restock notification";
+     }
+   }  // notification restockedInventory
+
+
+  }  // module shop
