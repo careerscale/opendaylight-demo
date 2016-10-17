@@ -1,0 +1,73 @@
+module system {
+    namespace "urn:abc:system";
+    prefix sys;
+
+    import ietf-inet-types { prefix inet; revision-date 2010-09-24; }
+    import ietf-yang-types { prefix yang; revision-date 2013-07-15; }
+    import iana-if-type { prefix ianaift; revision-date 2013-07-04; }
+
+    organization "ABC Corp.";
+    contact
+        "hari@harinath.net";
+    description
+        "This module defines a base model for a platform system.";
+
+    revision "2016-10-10" {
+        description
+                "Initial revision.";
+    }
+
+    typedef system-event-type {
+        type enumeration {
+            enum "add" {
+                value 0;
+                description
+                                "A system entity has been added.";
+            }
+            enum "remove" {
+                value 1;
+                description
+                                "A system entity has been removed.";
+            }
+            enum "update" {
+                value 2;
+                description
+                                "A system entity has been updated.";
+            }
+        }
+        description "System Event type for notifications";
+    }
+    // system-event-type
+    
+    grouping last-update-time {
+        leaf last-update-time {
+        	config false;
+        	type yang:date-and-time;
+        	description
+        		"Any time the container that contains this changes, the
+        		time needs to be update";
+        }
+    }
+
+    container system {
+        description
+                "Describes a system.";
+        list object-ids {
+            key "topic";
+            description
+                        "The list of last allocated id for each topic.";
+
+            leaf topic {
+                type inet:uri;
+                description
+                                "An identifer that identifies the topic.";
+            }
+
+            leaf last-allocated-id {
+                type uint64;
+                description
+                                "The last allocated id value for the topic.";
+            }
+        }
+    }
+}

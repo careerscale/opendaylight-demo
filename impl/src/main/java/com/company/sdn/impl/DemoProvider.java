@@ -24,6 +24,7 @@ public class DemoProvider {
 	private ShopRpcProvider shopRpcProvider;
 	private NotificationPublishService notificationPublishService;
 	private RpcProviderRegistry rpcRegistry;
+	private ConnectorRpcProvider connectorRpcProvider;
 
 	public DemoProvider(final DataBroker dataBroker, final NotificationPublishService notificationPublishService,
 			final RpcProviderRegistry rpcRegistry) {
@@ -40,6 +41,7 @@ public class DemoProvider {
 		LOG.info("DemoProvider Session Initiated");
 		toasterService = new ToasterRpcService(dataBroker, notificationPublishService, rpcRegistry);
 		shopRpcProvider = new ShopRpcProvider(dataBroker, notificationPublishService, rpcRegistry);
+		this.connectorRpcProvider = new ConnectorRpcProvider(dataBroker, notificationPublishService, rpcRegistry);
 		
 
 	}

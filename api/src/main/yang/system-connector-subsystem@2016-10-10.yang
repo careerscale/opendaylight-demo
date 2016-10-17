@@ -1,0 +1,92 @@
+module system-connector-subsystem {
+    namespace "urn:abc:system:connector:subsystem";
+    prefix sys-connector-subsystem;
+
+    import ietf-inet-types { prefix inet; revision-date 2010-09-24; }
+    import yang-ext { prefix ext; revision-date 2013-07-09; }
+    import system { prefix sys; revision-date 2016-10-10; }
+    import system-connector { prefix sys-connector; revision-date 2016-10-10; }
+
+    organization "ABC Corp.";
+    contact
+        "hari@harinath.net";
+    description
+        "This module defines the data model for subsystem connectors";
+
+    revision "2016-10-10" {
+        description
+                "Initial revision.";
+    }
+
+    grouping connector-subsystem-config-attributes {
+        leaf port {
+            mandatory false;
+            default 8443;
+            type uint16;
+        }
+
+        leaf request-timeout {
+            type uint16 {
+	          range "30 .. max";
+	        }
+            units "seconds";
+            default 30;
+            description
+                        "Used as timeout for http requests";
+        }
+        
+        leaf keepalive-interval {
+            type uint16;
+            units "seconds";
+            default 30;
+            description
+                        "Used as interval between subsequent keepAlive requests. ";
+        }
+
+        leaf keepalive-count {
+            type uint16;
+            default 3;
+            description
+                        "Max number of heartbeats before declaring connection to be down, but do not give up on reconnecting";
+        }
+
+        uses sys-connector:auth-credential;
+    }
+
+    grouping connector-subsystem-config {
+        container config {
+            uses connector-subsystem-config-attributes;
+        }
+    }
+
+    grouping connector-subsystem-state-attributes {
+        leaf oper-status {
+            type identityref {
+                base sys-connector:connector-oper-status;
+            }
+            description
+                        "Indentifies the subsystem connector operational status.";
+        }
+    }
+
+    grouping connector-subsystem-state {
+        container state {
+            config false;
+            uses connector-subsystem-state-attributes;
+            uses connector-subsystem-config-attributes;
+        }
+    }
+
+    grouping connector-subsystem {
+        container subsystem {
+            presence "Indicates Connector Type subsystem";
+            uses connector-subsystem-config;
+            uses connector-subsystem-state;
+        }
+    }
+
+    augment "/sys:system/sys-connector:connectors/sys-connector:connector" {
+        ext:augment-identifier "system-connector-subsystem";
+        uses connector-subsystem;
+    }
+}

@@ -1,0 +1,244 @@
+module system-connector-xyz {
+    namespace "urn:abc:system:connector:xyz";
+    prefix sys-connector-xyz;
+
+    import ietf-inet-types { prefix inet; }
+    import yang-ext { prefix ext; revision-date 2013-07-09; }
+    import system { prefix sys; revision-date 2016-10-10; }
+    import system-connector { prefix sys-connector; revision-date 2016-10-10; }
+    import ietf-yang-types { prefix "yang"; }
+    organization "ABC Corp.";
+    contact
+        "hari@harinath.net";
+    description
+        "This module defines the data model for xyz connectors";
+
+    revision "2016-10-10" {
+        description
+                "Initial revision.";
+    }
+
+    identity discovered {
+        base sys-connector:connector-oper-status;
+        description "Discovered.";
+    }
+   
+
+    typedef discovery-node-id {
+        type inet:uri;
+        description
+                "Identifier for a discovery node.";
+    }
+
+    
+    typedef discovery-status-type {
+        description "Discovery state";
+        type enumeration {
+            enum "Discovered" {
+                description "Discovered";
+            }
+            enum "Undiscovered" {
+                description "Undiscovered";
+            }
+            enum "Discovering" {
+                description "Undiscovered";
+            }
+             enum "Failed" {
+                description "Discovery Failed";
+            }
+            
+        }
+    }
+    
+    grouping auth-credential {
+           container auth-credential {
+            leaf user-name {
+            	mandatory true;
+                type string;
+                description
+                                "The user name used for logging into the system.";
+            }
+            leaf password {
+            	mandatory true;
+                type string;
+                description
+                                "The password information used for logging into the system";
+            }
+          }
+     
+    }
+     
+    
+    grouping discovery-node-config-attributes {
+        leaf network {
+            type string;
+            description
+                        "This is the name used while creating a ForwardingDomain and a
+                        network element in the ForwardingDomain.";
+        }
+
+        leaf ip-address {
+        	mandatory true;
+            type inet:ip-address;
+            description
+                        "Represents the DCN IP address of a node through which the network
+                        needs to be discovered.";
+        }
+    }
+    
+    grouping discovery-node-config {
+        container config {
+            uses discovery-node-config-attributes;
+        }
+    }
+    
+    grouping discovery-node-state-attributes {
+        leaf node-id {
+            type string;
+            description
+                "Represent node identification.";
+        }
+        
+        leaf discovery-status {
+            type discovery-status-type;
+        }
+    }
+    
+    grouping discovery-node-state {
+        container state {
+            config false;
+            uses discovery-node-state-attributes;
+            uses discovery-node-config-attributes;
+        }
+    }
+    
+    grouping discovery-node {
+        leaf id {
+            type discovery-node-id;
+            description
+                "An identifer that identifies a node uniquely.";
+        }
+
+        uses discovery-node-config;
+        uses discovery-node-state;
+    }
+    
+    grouping connector-xyz-config-attributes {
+       	leaf update_status {
+			description "Augment for tracking update  status for xyz connector";
+			type enumeration {
+				enum pending;
+				enum success;
+				enum failure;
+			}
+		}
+    }
+
+    grouping connector-xyz-config {
+        container config {
+            uses connector-xyz-config-attributes;
+        }
+    }
+    
+    grouping connector-xyz-discovery-scope-attributes {
+	    list sdncontroller {
+	        key name;
+	        leaf name {
+	            type string;
+	        }
+	
+	        list ncdomain {
+	            key name;
+	            leaf name {
+	                type string;
+	            }
+	
+	            list forwarding-domain {
+	                key id;
+	                leaf id {
+	                    type string;
+	                }
+	            }   
+	        }
+	    }
+	}
+    
+    grouping connector-xyz-state-attributes {
+        leaf discovery-status {
+            type discovery-status-type;
+            description
+            	"If not connected to xyz, the state should is undiscovered.
+            	 If connected to xyz but discovery failed, the state is undiscovered.
+            	 If connected to xyz and we are in the process of discovering, the state is discovering.
+            	 If connected to xyz and we are in sync, the state is discovered.
+            	";
+        }
+    }
+
+    grouping connector-xyz-state {
+        container state {
+            config false;
+            uses connector-xyz-state-attributes;
+            uses connector-xyz-config-attributes;
+        }
+    }
+    
+    grouping connector-xyz {
+        container xyz {
+            presence "Indicates Connector Endpoint Type xyz";
+            uses connector-xyz-config;
+            uses connector-xyz-state;
+       
+            container discovery-nodes {
+                list discovery-node {
+                    key "id";
+                    uses discovery-node;
+                }
+            }
+           
+	        container discovery-scope {
+	        	uses connector-xyz-discovery-scope-attributes;
+	        }
+        }
+    }
+    
+    augment "/sys:system/sys-connector:connectors/sys-connector:connector" {
+        ext:augment-identifier "system-connector-xyz";
+        uses connector-xyz;
+    }
+    
+     augment "/sys:system/sys-connector:connectors/sys-connector:connector/sys-connector-xyz:xyz/discovery-nodes/discovery-node" {
+        ext:augment-identifier discovery-node-provisioning-augment;
+        leaf provisioning-error-description {
+			type string;
+		}
+
+		leaf create-status {
+			description "Augment for tracking create status for Discovery Node";
+			type enumeration {
+				enum pending;
+				enum success;
+				enum failure;
+			}
+		}
+
+		leaf delete_status {
+			description "Augment for tracking delete status for Discovery Node.";
+			type enumeration {
+				enum pending;
+				enum success;
+				enum failure;
+			}
+		}
+    }
+    
+     
+      augment "/sys:system/sys-connector:connectors/sys-connector:connector/sys-connector-xyz:xyz/discovery-nodes/discovery-node" {
+      ext:augment-identifier discovery-node-update-time-augment;
+        leaf last-update-time {
+            type yang:date-and-time;
+        }
+     }
+    
+    
+}

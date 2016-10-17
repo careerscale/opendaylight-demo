@@ -1,0 +1,34 @@
+module system-connector-xyz-notification {
+    namespace "urn:abc:system:connector:xyz:notification";
+    prefix xyz-notification;
+
+    import yang-ext { prefix ext; revision-date 2013-07-09; }
+    import system { prefix sys; revision-date 2016-10-10; }
+    import system-connector { prefix sys-connector; revision-date 2016-10-10; }
+    import system-connector-subsystem { prefix sys-connector-subsystem; revision-date 2016-10-10; }
+    import system-connector-xyz { prefix sys-connector-xyz; revision-date 2016-10-10; }
+
+    organization "ABC Corp.";
+    contact
+        "hari@harinath.net";
+    description
+        "This module defines the notifications for connectors";
+
+    revision "2016-10-10" {
+        description
+                "Initial revision.";
+    }
+
+    notification connector-lifecycle-event {
+        description
+            "Notification messages for system connector lifecycle.";
+        leaf event-type {
+            type sys:system-event-type;
+            description "Event type";
+        }
+
+        uses sys-connector:connector;
+        uses sys-connector-subsystem:connector-subsystem;
+        uses sys-connector-xyz:connector-xyz;
+    }
+}

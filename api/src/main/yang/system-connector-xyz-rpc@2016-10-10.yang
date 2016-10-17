@@ -1,0 +1,90 @@
+module system-connector-xyz-rpc {
+    namespace "urn:abc:system:connector:xyz:rpc";
+    prefix sys-connector-xyz-rpc;
+
+    import ietf-inet-types { prefix inet; revision-date 2010-09-24; }
+    import yang-ext { prefix ext; revision-date 2013-07-09; }
+    import system { prefix sys; revision-date 2016-10-10; }
+    import system-connector { prefix sys-connector; revision-date 2016-10-10; }
+    import system-connector-subsystem { prefix sys-connector-subsystem; revision-date 2016-10-10;}
+    import system-connector-xyz { prefix sys-connector-xyz; revision-date 2016-10-10;}
+
+    organization "ABC Corp.";
+    contact
+        "hari@harinath.net";
+    description
+        "This module defines the data model for xyz connector rpc";
+
+    revision "2016-10-10" {
+        description
+                "Initial revision.";
+    }
+
+    rpc add-connector {
+        description "Create a connector";
+        input {
+            uses sys-connector:connector;
+             uses sys-connector-subsystem:connector-subsystem;
+            uses  sys-connector-xyz:connector-xyz;
+        }
+        output {
+            leaf id {
+                type sys-connector:connector-id;
+            }
+        }
+    }
+
+    rpc update-connector {
+        description "Update connector";
+        input {
+            leaf merge {
+            	type boolean;
+            	description
+            		"If set to true, the input is merged to what is already configured,
+            		if not, the input overwrites the config.";
+            }
+            
+            uses sys-connector:connector;
+            uses sys-connector-subsystem:connector-subsystem;
+            uses sys-connector-xyz:connector-xyz;
+        }
+    }
+    
+    rpc delete-connector {
+        description "Delete connector";
+        input {
+            leaf id {
+                type sys-connector:connector-id;
+            }
+        }
+    }
+    
+    rpc add-discovery-node {
+        description "Add discovery node";
+        input {
+            leaf connector-id {
+                type sys-connector:connector-id;
+            }
+
+            uses sys-connector-xyz:discovery-node;
+        }
+        output {
+            leaf id {
+                type sys-connector-xyz:discovery-node-id;
+            }
+        }
+    }
+
+    rpc delete-discovery-node {
+        description "Delete discovery node";
+        input {
+            leaf connector-id {
+                type sys-connector:connector-id;
+            }
+            
+            leaf discovery-node-id {
+                type sys-connector-xyz:discovery-node-id;
+            }
+        }
+    }
+}
