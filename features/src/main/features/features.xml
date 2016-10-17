@@ -17,6 +17,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.dlux/features-dlux/{{VERSION}}/xml/features</repository>
   <feature name='odl-demo-api' version='${project.version}' description='OpenDaylight :: demo :: api'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
+    <bundle>mvn:org.opendaylight.mdsal.model/iana-if-type/${iana-if-type.version}</bundle>
     <bundle>mvn:com.company.sdn/demo-api/{{VERSION}}</bundle>
   </feature>
   <feature name='odl-demo' version='${project.version}' description='OpenDaylight :: demo'>
