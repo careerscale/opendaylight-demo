@@ -32,7 +32,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <yangtools.version>1.0.0-Boron</yangtools.version>
     <dlux.version>0.4.0-Boron</dlux.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
+     
+		<iana-if-type.version>2013.07.04.9-Boron</iana-if-type.version>
+		<ietf-topology.version>2013.10.21.9-Boron</ietf-topology.version>
+		<ietf-inet-types.version>2010.09.24.9-Boron</ietf-inet-types.version>
+		<ietf-inet-types-20130715.version>1.1.0-Boron</ietf-inet-types-20130715.version>
+		<ietf-yang-types.version>2010.09.24.9-Boron</ietf-yang-types.version>
+		<ietf-yang-types-20130715.version>2013.07.15.9-Boron</ietf-yang-types-20130715.version>
+		<yang-ext.version>2013.09.07.9-Boron</yang-ext.version>
   </properties>
+  
 
   <dependencyManagement>
     <dependencies>
