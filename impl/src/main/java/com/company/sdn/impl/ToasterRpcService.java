@@ -41,7 +41,7 @@ public class ToasterRpcService implements ToasterService{
 		this.notificationPublishService = notificationPublishService;
 		this.rpcRegistry = rpcRegistry;
 		LOG.info("Toaster RPC server is initialized now {} ", dataBroker);
-		registration = this.rpcRegistry.addRpcImplementation(ToasterService.class, this);
+	//	registration = this.rpcRegistry.addRpcImplementation(ToasterService.class, this);
 
 		 
 	}

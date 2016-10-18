@@ -58,7 +58,6 @@ public class ConnectorRpcProvider implements SystemConnectorXyzRpcService {
 	@Override
 	public Future<RpcResult<AddConnectorOutput>> addConnector(AddConnectorInput input) {
 		RpcResultBuilder<AddConnectorOutput> rpcResultBuilder = RpcResultBuilder.success();
-		Future<RpcResult<AddConnectorOutput>> result;
 		String connectorIdString = CONNECTOR_PREFIX +Long.toString(Calendar.getInstance().getTimeInMillis());
 		ConnectorId connectorId = new ConnectorId(connectorIdString);
 		ConnectorKey connectorKey = new ConnectorKey(connectorId);
@@ -70,7 +69,7 @@ public class ConnectorRpcProvider implements SystemConnectorXyzRpcService {
 		
 		input.getConfig();
 
-		Connector connector = new ConnectorBuilder().setConfig(input.getConfig()).build();
+		Connector connector = new ConnectorBuilder().setConfig(input.getConfig()).setId(connectorId).setKey(connectorKey).build();
 		ReadWriteTransaction transaction =dataBroker.newReadWriteTransaction();
 		transaction.merge(LogicalDatastoreType.CONFIGURATION, connectorIID, connector);
 		
