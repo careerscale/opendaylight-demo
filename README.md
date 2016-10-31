@@ -7,9 +7,10 @@ This project is a demo project that uses opendaylight latest code base and prese
 
 Opendaylight sample
 ```java
-mvn archetype:generate -DarchetypeGroupId=org.opendaylight.controller -DarchetypeArtifactId=opendaylight-startup-archetype -DarchetypeRepository=https://nexus.opendaylight.org/content/repositories/public/ -DarchetypeCatalog=https://nexus.opendaylight.org/content/repositories/public/archetype-catalog.xml -DarchetypeVersion=1.2.0-SNAPSHOT
+mvn archetype:generate -DarchetypeGroupId=org.opendaylight.controller -DarchetypeArtifactId=opendaylight-startup-archetype -DarchetypeRepository=https://nexus.opendaylight.org/content/repositories/public/ -DarchetypeCatalog=https://nexus.opendaylight.org/content/repositories/public/archetype-catalog.xml -DarchetypeVersion=1.2.0-Boron
 ```
 Please check the archetype version to be latest archetypeVersion
+https://wiki.opendaylight.org/view/OpenDaylight_Controller:MD-SAL:Startup_Project_Archetype
 
 refer the pom.xml files in the following locations to validate it.
 [https://github.com/opendaylight/controller/tree/master/opendaylight/archetypes/opendaylight-startup]
