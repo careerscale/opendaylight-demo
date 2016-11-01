@@ -71,7 +71,7 @@ public class ConnectorRpcProvider implements SystemConnectorXyzRpcService {
 
 		Connector connector = new ConnectorBuilder().setConfig(input.getConfig()).setId(connectorId).setKey(connectorKey).build();
 		ReadWriteTransaction transaction =dataBroker.newReadWriteTransaction();
-		transaction.merge(LogicalDatastoreType.CONFIGURATION, connectorIID, connector);
+		transaction.merge(LogicalDatastoreType.CONFIGURATION, connectorIID, connector,true);
 		
 		transaction.submit();
 		
