@@ -10,6 +10,9 @@ package com.company.sdn.impl;
 import java.util.Calendar;
 import java.util.concurrent.Future;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AbstractAuthenticator;
+import org.apache.shiro.mgt.AuthenticatingSecurityManager;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
@@ -37,9 +40,16 @@ import org.opendaylight.yang.gen.v1.urn.abc.system.rev161010.SystemEventType;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
+import com.company.sdn.impl.audit.CustomAuthenticationListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class ConnectorRpcProvider implements SystemConnectorXyzRpcService {
-	
+
+
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+
 	private static final String CONNECTOR_PREFIX="connector-id=";
 	
 	private DataBroker dataBroker;
@@ -51,12 +61,46 @@ public class ConnectorRpcProvider implements SystemConnectorXyzRpcService {
 		this.dataBroker=dataBroker;
 		this.notificationPublishService = notificationPublishService;
 		this.rpcRegistry = rpcRegistry;
-		this.rpcRegistry.addRpcImplementation(SystemConnectorXyzRpcService.class, this); 
+		this.rpcRegistry.addRpcImplementation(SystemConnectorXyzRpcService.class, this);
+		/**
+		 * This block never worked as it needs static security manager  which needs staticSecurityManagerEnabled to be set.
+		 */
+		try {
+			AuthenticatingSecurityManager securityMgr =
+					(AuthenticatingSecurityManager) SecurityUtils.getSecurityManager();
+
+			LOG.info("security mgr {}",securityMgr);
+
+			AbstractAuthenticator authentication = (AbstractAuthenticator) securityMgr.getAuthenticator();
+
+			authentication.getAuthenticationListeners().add(new CustomAuthenticationListener());
+
+		} catch (Exception e) {
+			LOG.error("error {}", e);
+		}
 		
 	}
 
 	@Override
 	public Future<RpcResult<AddConnectorOutput>> addConnector(AddConnectorInput input) {
+
+		/**
+		 * Temporary code here.
+		 * */
+		try {
+			AuthenticatingSecurityManager securityMgr =
+					(AuthenticatingSecurityManager) SecurityUtils.getSecurityManager();
+
+			LOG.info("security mgr {}",securityMgr);
+
+			AbstractAuthenticator authentication = (AbstractAuthenticator) securityMgr.getAuthenticator();
+
+			authentication.getAuthenticationListeners().add(new CustomAuthenticationListener());
+
+		} catch (Exception e) {
+			LOG.error("error {}", e);
+		}
+
 		RpcResultBuilder<AddConnectorOutput> rpcResultBuilder = RpcResultBuilder.success();
 		String connectorIdString = CONNECTOR_PREFIX +Long.toString(Calendar.getInstance().getTimeInMillis());
 		ConnectorId connectorId = new ConnectorId(connectorIdString);
